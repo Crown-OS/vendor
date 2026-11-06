@@ -20,3 +20,19 @@ vello_encoding_06 = { package = "vello_encoding", path = "../vendor/vello_encodi
 ```
 
 Drop a copy when its vello version is no longer in use.
+
+## `pipewire-native` 0.1.4
+
+Used by crownbar's audio service. Upstream (0.1.4 and 0.2.0) numbers
+`NodeState` and `LinkState` from zero, while PipeWire sends `error = -1`,
+`creating = 0` … `running = 3` for nodes and `error = -2`, `unlinked = -1`,
+`init = 0` … for links. Every state therefore decoded one step off (a running
+node read as idle), and a node entering its error state — a Bluetooth sink as
+the headset disconnects — failed to decode, which tears the whole connection
+down. One change, in `src/proxy/node.rs` and `src/proxy/link.rs`: the enums
+carry PipeWire's own values.
+
+```toml
+[patch.crates-io]
+pipewire-native = { path = "../vendor/pipewire-native-0.1.4" }
+```
