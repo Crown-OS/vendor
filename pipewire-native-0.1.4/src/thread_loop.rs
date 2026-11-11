@@ -10,7 +10,7 @@ use std::thread;
 
 use crate::{
     closure, debug, default_topic, error, log, main_loop::MainLoop, new_refcounted,
-    properties::Properties, refcounted, some_closure, trace,
+    properties::Properties, refcounted, some_closure, trace, warn,
 };
 
 default_topic!(log::topic::THREAD_LOOP);
@@ -82,14 +82,16 @@ impl ThreadLoop {
                 trace!("iterate");
                 let _guard = this.inner.mutex.lock();
 
+                // Like pw_thread_loop, only a quit ends the thread. An
+                // epoll_wait interrupted by suspend or SIGSTOP/SIGCONT reaches
+                // here as -1 (the spa system shim drops the errno), and
+                // returning on it left the connection unread for good.
                 if let Err(e) = this.inner.main_loop.run_once() {
                     if e.kind() == std::io::ErrorKind::NotConnected {
                         error!("done: {e:?}");
                         break;
-                    } else {
-                        error!("terminating: {e:?}");
-                        return Err(e);
                     }
+                    warn!("iterate error: {e:?}");
                 }
 
                 // guard is dropped here, dropping the lock
