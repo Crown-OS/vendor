@@ -1,0 +1,5 @@
+# yaml-language-server: $schema=https://www.coderabbit.ai/integrations/schema.v2.json
+# Vendored third-party crates: no automatic review. Ask with @coderabbitai review if needed.
+reviews:
+  auto_review:
+    enabled: false
