@@ -36,3 +36,10 @@ carry PipeWire's own values.
 [patch.crates-io]
 pipewire-native = { path = "../vendor/pipewire-native-0.1.4" }
 ```
+
+## Licensing
+
+Each vendored crate keeps its upstream license: `vello_encoding` is MIT OR
+Apache-2.0 (license files in each directory) and `pipewire-native` is MIT
+(see its `Cargo.toml`). The root `LICENSE-MIT` and `LICENSE-APACHE` cover only
+CrownOS's own changes and files in this repository.
